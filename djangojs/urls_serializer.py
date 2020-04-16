@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import json
 import logging
@@ -8,7 +8,8 @@ import sys
 import types
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.core.urlresolvers import RegexURLPattern, RegexURLResolver, get_script_prefix
+from django.urls import get_script_prefix
+from django.urls.resolvers import URLPattern, URLResolver
 from django.utils import six
 
 from djangojs.conf import settings
@@ -56,7 +57,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
     if prefix is '':
         prefix = get_script_prefix()
 
-    if issubclass(pattern.__class__, RegexURLPattern):
+    if issubclass(pattern.__class__, URLPattern):
         if settings.JS_URLS_UNNAMED:
             mod_name, obj_name = pattern.callback.__module__, pattern.callback.__name__
             try:
@@ -106,7 +107,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
     elif (CMS_APP_RESOLVER) and (issubclass(pattern.__class__, AppRegexURLResolver)):  # hack for django-cms
         for p in pattern.url_patterns:
             urls.update(_get_urls_for_pattern(p, prefix=prefix, namespace=namespace))
-    elif issubclass(pattern.__class__, RegexURLResolver):
+    elif issubclass(pattern.__class__, URLResolver):
         if pattern.urlconf_name:
             if pattern.namespace and not pattern.app_name:
                 # Namespace without app_name
