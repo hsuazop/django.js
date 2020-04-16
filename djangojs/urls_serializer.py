@@ -51,6 +51,19 @@ def urls_as_json():
     return json.dumps(urls_as_dict(), cls=DjangoJSONEncoder)
 
 
+def get_regex_pattern(urlpattern):
+    """Borrowed from rest framework
+
+    https://github.com/encode/django-rest-framework/pull/5500/files
+    """
+    if hasattr(urlpattern, 'pattern'):
+        # Django 2.0
+        return urlpattern.pattern.regex.pattern
+    else:
+        # Django < 2.0
+        return urlpattern.regex.pattern
+
+
 def _get_urls_for_pattern(pattern, prefix='', namespace=None):
     urls = {}
 
@@ -77,7 +90,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
                 return {}
             if namespace:
                 pattern_name = ':'.join((namespace, pattern_name))
-            full_url = prefix + pattern.regex.pattern
+            full_url = prefix + get_regex_pattern(pattern)
             for char in ['^', '$']:
                 full_url = full_url.replace(char, '')
             # remove optionnal non capturing groups
@@ -122,7 +135,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
                     continue
                 if settings.JS_URLS_NAMESPACES_EXCLUDE and namespaces in settings.JS_URLS_NAMESPACES_EXCLUDE:
                     continue
-                new_prefix = '%s%s' % (prefix, pattern.regex.pattern)
+                new_prefix = '%s%s' % (prefix, get_regex_pattern(pattern))
                 urls.update(_get_urls(pattern.urlconf_name, new_prefix, namespaces))
 
     return urls
