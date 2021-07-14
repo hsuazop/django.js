@@ -39,8 +39,6 @@ long_description = '\n'.join((
 ))
 
 install_requires = ['django']
-if sys.version_info[0:2] < (2, 7):
-    install_requires += ['argparse']
 
 setup(
     name='django.js',

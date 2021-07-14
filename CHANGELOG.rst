@@ -6,6 +6,11 @@ Current
 
 - Nothing yet
 
+1.0.0 (2021-07-14)
+------------------
+- Django 2.0 compatibility
+- Remove dependency on ``django.utils.six``, which is not in Django 3.x
+
 0.8.1 (2013-10-19)
 ------------------
 
