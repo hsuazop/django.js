@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import json
 import logging
@@ -8,8 +8,9 @@ import sys
 import types
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.urls import URLPattern as RegexURLPattern, URLResolver as RegexURLResolver, get_script_prefix
-from django.utils import six
+from django.urls import get_script_prefix
+from django.urls import URLPattern as RegexURLPattern, URLResolver as RegexURLResolver
+from django.urls.resolvers import URLPattern, URLResolver
 
 from djangojs.conf import settings
 
@@ -50,13 +51,26 @@ def urls_as_json():
     return json.dumps(urls_as_dict(), cls=DjangoJSONEncoder)
 
 
+def get_regex_pattern(urlpattern):
+    """Borrowed from rest framework
+
+    https://github.com/encode/django-rest-framework/pull/5500/files
+    """
+    if hasattr(urlpattern, 'pattern'):
+        # Django 2.0
+        return urlpattern.pattern.regex.pattern
+    else:
+        # Django < 2.0
+        return urlpattern.regex.pattern
+
+
 def _get_urls_for_pattern(pattern, prefix='', namespace=None):
     urls = {}
 
     if prefix is '':
         prefix = get_script_prefix()
 
-    if issubclass(pattern.__class__, RegexURLPattern):
+    if issubclass(pattern.__class__, URLPattern):
         if settings.JS_URLS_UNNAMED:
             mod_name, obj_name = pattern.callback.__module__, pattern.callback.__name__
             try:
@@ -76,7 +90,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
                 return {}
             if namespace:
                 pattern_name = ':'.join((namespace, pattern_name))
-            full_url = prefix + pattern.regex.pattern
+            full_url = prefix + get_regex_pattern(pattern)
             for char in ['^', '$']:
                 full_url = full_url.replace(char, '')
             # remove optionnal non capturing groups
@@ -106,7 +120,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
     elif (CMS_APP_RESOLVER) and (issubclass(pattern.__class__, AppRegexURLResolver)):  # hack for django-cms
         for p in pattern.url_patterns:
             urls.update(_get_urls_for_pattern(p, prefix=prefix, namespace=namespace))
-    elif issubclass(pattern.__class__, RegexURLResolver):
+    elif issubclass(pattern.__class__, URLResolver):
         if pattern.urlconf_name:
             if pattern.namespace and not pattern.app_name:
                 # Namespace without app_name
@@ -121,7 +135,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
                     continue
                 if settings.JS_URLS_NAMESPACES_EXCLUDE and namespaces in settings.JS_URLS_NAMESPACES_EXCLUDE:
                     continue
-                new_prefix = '%s%s' % (prefix, pattern.regex.pattern)
+                new_prefix = '%s%s' % (prefix, get_regex_pattern(pattern))
                 urls.update(_get_urls(pattern.urlconf_name, new_prefix, namespaces))
 
     return urls
@@ -129,7 +143,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
 
 def _get_urls(module, prefix='', namespace=None):
     urls = {}
-    if isinstance(module, (six.text_type, six.string_types)):
+    if isinstance(module, str):
         try:
             __import__(module)
             root_urls = sys.modules[module]
