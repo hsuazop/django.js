@@ -9,8 +9,8 @@ import types
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.urls import get_script_prefix
+from django.urls import URLPattern as RegexURLPattern, URLResolver as RegexURLResolver
 from django.urls.resolvers import URLPattern, URLResolver
-from django.utils import six
 
 from djangojs.conf import settings
 
@@ -143,7 +143,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
 
 def _get_urls(module, prefix='', namespace=None):
     urls = {}
-    if isinstance(module, (six.text_type, six.string_types)):
+    if isinstance(module, str):
         try:
             __import__(module)
             root_urls = sys.modules[module]

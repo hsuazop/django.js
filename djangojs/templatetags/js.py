@@ -6,7 +6,6 @@ from __future__ import unicode_literals
 
 from django import template
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.utils import six
 from django.utils.safestring import mark_safe
 
 from djangojs import JQUERY_MIGRATE_VERSION
@@ -146,7 +145,7 @@ def css(filename):
 def _boolean(value):
     if isinstance(value, bool):
         return value
-    elif isinstance(value, (six.text_type, six.string_types)):
+    elif isinstance(value, str):
         return value.lower() == 'true'
     elif isinstance(value, int):
         return value != 0
