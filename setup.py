@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
+
 import re
-import sys
 import codecs
 
 from setuptools import setup, find_packages
@@ -45,7 +44,7 @@ setup(
     version=__import__('djangojs').__version__,
     description=__import__('djangojs').__description__,
     long_description=long_description,
-    url='https://github.com/noirbizarre/django.js',
+    url='https://github.com/rideco/django.js',
     download_url='http://pypi.python.org/pypi/django.js',
     author='Axel Haustant',
     author_email='noirbizarre+django@gmail.com',

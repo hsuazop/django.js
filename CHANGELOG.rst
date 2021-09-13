@@ -6,6 +6,10 @@ Current
 
 - Nothing yet
 
+1.0.1 (2021-09-13)
+------------------
+- Fix issue with setuptools 58 and up, where `use_2to3` was removed.
+
 1.0.0 (2021-07-14)
 ------------------
 - Django 2.0 compatibility
