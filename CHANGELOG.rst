@@ -6,6 +6,10 @@ Current
 
 - Nothing yet
 
+1.0.2 (2021-12-06)
+------------------
+- Fix issue with Django 3.0 and up, where `django.utils.six` was removed.
+
 1.0.1 (2021-09-13)
 ------------------
 - Fix issue with setuptools 58 and up, where `use_2to3` was removed.
