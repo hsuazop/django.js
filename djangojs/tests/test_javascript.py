@@ -1,6 +1,6 @@
 from django.conf import global_settings
 from django.test.utils import override_settings
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from djangojs.runners import JsTestCase, JsTemplateTestCase, JasmineSuite, QUnitSuite
 
