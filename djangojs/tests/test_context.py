@@ -130,8 +130,8 @@ class ContextTestMixin(object):
         for code, name in settings.LANGUAGES:
             self.assertEqual(languages[code], name)
 
-    @override_settings(LANGUAGE_CODE='en-us', LANGUAGES=[('fr', translation.ugettext_lazy('French'))])
-    def test_ugettext_lazy(self):
+    @override_settings(LANGUAGE_CODE='en-us', LANGUAGES=[('fr', translation.gettext_lazy('French'))])
+    def test_gettext_lazy(self):
         '''Serialization should not fail on lazy translations'''
         result = self.process_request(headers={'HTTP_ACCEPT_LANGUAGE': 'fr'})
         self.assertIn('LANGUAGES', result)
