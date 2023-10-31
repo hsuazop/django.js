@@ -104,7 +104,7 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'djangojs.tests.custom_processor',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -188,7 +188,7 @@ if 'jenkins' in sys.argv:
 if DEBUG:
     try:
         import debug_toolbar
-        MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+        MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
         INSTALLED_APPS += ('debug_toolbar',)
         INTERNAL_IPS = ('127.0.0.1',)
         DEBUG_TOOLBAR_CONFIG = {

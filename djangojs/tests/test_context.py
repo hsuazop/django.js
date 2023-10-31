@@ -25,7 +25,7 @@ TEST_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.i18n',
 )
 
-TEST_MIDDLEWARES = global_settings.MIDDLEWARE_CLASSES + (
+TEST_MIDDLEWARES = global_settings.MIDDLEWARE + (
     'django.middleware.locale.LocaleMiddleware',
 )
 
@@ -253,7 +253,7 @@ class ContextTestMixin(object):
 
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,
-    MIDDLEWARE_CLASSES=TEST_MIDDLEWARES,
+    MIDDLEWARE=TEST_MIDDLEWARES,
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsDictTest(ContextTestMixin, TestCase):
@@ -263,7 +263,7 @@ class ContextAsDictTest(ContextTestMixin, TestCase):
 
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,
-    MIDDLEWARE_CLASSES=TEST_MIDDLEWARES,
+    MIDDLEWARE=TEST_MIDDLEWARES,
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsJsonTest(ContextTestMixin, TestCase):
@@ -273,7 +273,7 @@ class ContextAsJsonTest(ContextTestMixin, TestCase):
 
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,
-    MIDDLEWARE_CLASSES=TEST_MIDDLEWARES,
+    MIDDLEWARE=TEST_MIDDLEWARES,
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextJsonViewTest(TestCase):
