@@ -26,6 +26,8 @@ def js_info_dict():
             if isdir(join(path, 'locale')):
                 js_info_dict['packages'].append(app)
                 break
+    # Convert list to string for compatibility with django 4.2
+    js_info_dict['packages'] = '+'.join(js_info_dict['packages'])
     return js_info_dict
 
 
